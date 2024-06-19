@@ -11,7 +11,7 @@ const population = view(
     width: 600
   })
 );
-const taille = view(Inputs.number([0, Infinity], {step: 1, label : "Taille de la popultation", placeholder: "400000",
+const taille = view(Inputs.number([0, Infinity], {step: 1, label : "Taille de la population", placeholder: "400000",
     width: 600}));
 const catégorie = view(
   Inputs.text({
@@ -27,7 +27,6 @@ const order = view(Inputs.toggle({label: "Ordonner la population", value: false}
 ```
   </div>
 </div>
-
 
 <div class="grid grid-cols-2">
   <div class="card">
@@ -93,22 +92,19 @@ display(svg.node());
 # Tirage d'un échantillon
 
 ```js
-const taille_echantillon = view(Inputs.range([0, taille], {step: 1, label: "Taille de l'échantillon", placeholder: "1000"}));
+const taille_echantillon = view(Inputs.range([0, taille], {step: 1, label: "Taille de l'échantillon", placeholder: "0"}));
 ```
 
 ```js
 // Dimensions du rectangle
 const width = 500;
 const height = 300;
-let data_select = [];
-if (taille_echantillon > 0 && taille_echantillon <= data.length) {
-   // Générez n indices aléatoires uniques
-  const indicesAleatoires = new Set();
-  while (indicesAleatoires.size < taille_echantillon) {
-    const randomIndex = Math.floor(Math.random() * data.length);
-    indicesAleatoires.add(randomIndex);
-  }
-  data_select = Array.from(indicesAleatoires).map(index => data[index]);
+const data_select = [];
+for (let i = 0; i < taille_echantillon) {
+  const randomIndex = Math.floor(Math.random() * data_select.length);
+  data_select.push(data_select[randomIndex]);
+  data_select.splice(randomIndex, 1);
+}
 
 }
 const blueElements = data_select.filter(item => item.color === 'blue').length;
@@ -145,3 +141,27 @@ Le tirage de **${taille_echantillon}** individus dans la population totale a cho
 
   </div>
 </dv>
+
+<div class="grid grid-cols-1">
+  <div class="card">
+
+# Estimation de la précision de ce résultat
+
+```js
+const vava = view(Inputs.number([0, Infinity], {step: 1, label : "Nombre de répétition de cette expérience", placeholder: "0", width: 600}));
+const messageElement = document.getElementById("message");
+if (vava < 10) {
+  messageElement.textContent = ("Le nombre doit être supérieur à 10");
+}
+let nbr_repet = [];
+for (let i = 0, i < vava) {
+  
+}
+
+
+```
+
+---
+L'écart-type de l'échantillon statistique considéré est de 
+  </div>
+</div>
