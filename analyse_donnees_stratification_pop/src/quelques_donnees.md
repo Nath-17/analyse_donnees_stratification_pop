@@ -105,8 +105,8 @@ if (taille_echantillon > 0 && taille_echantillon <= data.length) {
     indicesAleatoires.add(randomIndex);
   }
   data_select = Array.from(indicesAleatoires).map(index => data[index]);
-
 }
+
 const blueElements = data_select.filter(item => item.color === 'blue').length;
 const proportionBlue = (blueElements / taille_echantillon) * 100;
 ```
@@ -158,18 +158,51 @@ const tirage_nbr = view(Inputs.number([0, Infinity], {step: 1, label : "Nombre d
 ```
 
 ```js
-let tabl = [];
-let i = 0;
-while (i < tirage_nbr) {
-    i += 1;
-    tabl.push(i);
+let tab = [];
+for (let h = 1; h <= tirage_nbr; h++) {
+    let data_select = [];
+  if (taille_echantillon > 0 && taille_echantillon <= data.length) {
+   // Générez n indices aléatoires uniques
+  const indicesAleatoires = new Set();
+  while (indicesAleatoires.size < taille_echantillon) {
+    const randomIndex = Math.floor(Math.random() * data.length);
+    indicesAleatoires.add(randomIndex);
+  }
+  data_select = Array.from(indicesAleatoires).map(index => data[index]);
 }
-display (tabl)
+  const blueElements = data_select.filter(item => item.color === 'blue').length;
+  const proportionBlue = (blueElements / taille_echantillon) * 100;
+    tab.push(proportionBlue);
+}
+display (tab)
+```
+
+```js
+const moyenne = tab.reduce((acc, val) => acc + val, 0) / tab.length;
+console.log("moyenne :", moyenne);
+const carresEcarts = tab.map(val => Math.pow(val - moyenne, 2));
+console.log("carré:", carresEcarts);
+const sommeCarresEcarts = carresEcarts.reduce((acc, val) => acc + val, 0);
+console.log("somme:", sommeCarresEcarts);
+let ecartType;
+if (population) {
+    ecartType = Math.sqrt(sommeCarresEcarts / tab.length);
+} else {
+    ecartType = Math.sqrt(sommeCarresEcarts / (tab.length - 1));
+}
+display(ecartType)
 ```
 
 ---
-L'écart-type de l'échantillon statistique considéré est de 
+L'écart-type de l'échantillon statistique considéré est de **${ecartType}**.
 ---
+
+```js
+Plot.rectY({length: 500}, 
+  Plot.binX({y: "count"}, 
+  {x: tab}) )
+.plot()
+```
 
   </div>
 </div>
